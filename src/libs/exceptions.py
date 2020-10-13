@@ -1,0 +1,2 @@
+class IncorrectYaml(Exception):
+    pass
