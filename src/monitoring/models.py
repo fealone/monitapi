@@ -28,9 +28,3 @@ class MonitoringResult(BaseModel):
     status_code: int
     state: bool
     response: str
-
-
-class NotificationMessage(BaseModel):
-    expected_status_code: int
-    status_code: int
-    message: str

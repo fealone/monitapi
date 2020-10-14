@@ -114,7 +114,7 @@ python-versions = "*"
 version = "3.0.4"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Composable command line interface toolkit"
 name = "click"
 optional = false
@@ -200,14 +200,6 @@ typing_extensions = ["typing-extensions (>=3.7.2)"]
 
 [[package]]
 category = "main"
-description = "A package to prevent exploit"
-name = "pythonjsonlogger"
-optional = false
-python-versions = "*"
-version = "0.1.1"
-
-[[package]]
-category = "main"
 description = "YAML parser and emitter for Python"
 name = "pyyaml"
 optional = false
@@ -269,7 +261,7 @@ python = "<3.8"
 version = ">=3.7.4"
 
 [metadata]
-content-hash = "99f0e76ba17d1791a09837b45daf183781daaf7071d05cb92079e7296734545f"
+content-hash = "2c469f9b51f6bc5da106c34954e1527e71968ed5d892afa6c27a35b33fc69c76"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -499,9 +491,6 @@ pydantic = [
     {file = "pydantic-1.6.1-cp38-cp38-win_amd64.whl", hash = "sha256:530d7222a2786a97bc59ee0e0ebbe23728f82974b1f1ad9a11cd966143410633"},
     {file = "pydantic-1.6.1-py36.py37.py38-none-any.whl", hash = "sha256:b5b3489cb303d0f41ad4a7390cf606a5f2c7a94dcba20c051cd1c653694cb14d"},
     {file = "pydantic-1.6.1.tar.gz", hash = "sha256:54122a8ed6b75fe1dd80797f8251ad2063ea348a03b77218d73ea9fe19bd4e73"},
-]
-pythonjsonlogger = [
-    {file = "pythonjsonlogger-0.1.1.tar.gz", hash = "sha256:fc691f8f28c40cc319772006fbb6c8cba3ec98aa6e1127df637e93a286c3b455"},
 ]
 pyyaml = [
     {file = "PyYAML-5.3.1-cp27-cp27m-win32.whl", hash = "sha256:74809a57b329d6cc0fdccee6318f44b9b8649961fa73144a98735b0aaf029f1f"},

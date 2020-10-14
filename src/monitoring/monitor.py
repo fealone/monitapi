@@ -1,0 +1,66 @@
+import asyncio
+from typing import Any, Dict, Generator, IO, List
+
+from aiohttp import ClientSession
+
+from libs.exceptions import IncorrectYaml
+
+from monitoring.models import MonitoringResult, MonitoringTarget
+
+from notification.notification import NotificationMessage, notify
+
+import yaml
+
+
+def get_targets(targets: List[Dict[str, Any]]) -> Generator[MonitoringTarget, None, None]:
+    for target in targets:
+        yield MonitoringTarget(**target)
+
+
+async def monitor(target: MonitoringTarget) -> MonitoringResult:
+    state: bool
+    async with ClientSession(
+            read_timeout=target.timeout,
+            conn_timeout=target.timeout) as session:
+        method = getattr(session, target.method.lower())
+        if target.body:
+            req = method(
+                    target.url,
+                    headers=target.headers,
+                    data=target.body
+                    )
+        else:
+            req = method(
+                    target.url,
+                    headers=target.headers
+                    )
+        response = await req
+        if response.status == target.status_code:
+            state = True
+        else:
+            state = False
+        return MonitoringResult(
+                expected_status_code=target.status_code,
+                status_code=response.status,
+                state=state,
+                response=await response.text())
+
+
+async def watch(f: IO = None) -> None:
+    if f is None:
+        f = open("targets.yaml")
+    monitors = []
+    try:
+        targets = get_targets(yaml.load(f, Loader=yaml.BaseLoader))
+    except Exception:
+        raise IncorrectYaml()
+    for target in targets:
+        task = asyncio.ensure_future(monitor(target))
+        monitors.append(task)
+    results = await asyncio.gather(*monitors)
+    for result in results:
+        if result.state is False:
+            notify(NotificationMessage(
+                expected_status_code=result.expected_status_code,
+                status_code=result.status_code,
+                message=result.response))

@@ -1,7 +1,7 @@
 import logging
 import sys
 
-from models import NotificationMessage
+from notification.models import NotificationMessage
 
 
 logger = logging.getLogger("monitapi.alert")
