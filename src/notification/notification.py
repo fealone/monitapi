@@ -24,7 +24,7 @@ def get_targets(targets: List[Dict[str, Dict[str, Any]]]) -> Generator[Notificat
 
 
 def notify(message: NotificationMessage, targets_config: Dict[str, Any]) -> None:
-    targets = get_targets(targets_config["notification_targets"])
+    targets = get_targets(targets_config.get("notification_targets", []))
     for target in targets:
         if target.type == NotificationType.slack:
             notifier = SlackNotifier(target)
