@@ -1,4 +1,3 @@
-Warning: The lock file is not up to date with the latest changes in pyproject.toml. You may be getting outdated dependencies. Run update to update them.
 agraffe==0.2.0; python_version >= "3.7" \
     --hash=sha256:c5f761e643542f6287886f4e2f299f24129686bf4f39eef324dfdfa3aada02f6 \
     --hash=sha256:f95ea6dffb0d78b9b50e7170dba9c89886da72b783fad411ed48e4bb07311eab
