@@ -1,7 +1,9 @@
+from typing import Any, Dict, Generator, List
 import logging
 import sys
 
-from notification.models import NotificationMessage
+from notification.models import NotificationMessage, NotificationTarget, NotificationType
+from notification.libs.slack import SlackNotifier
 
 
 logger = logging.getLogger("monitapi.alert")
@@ -15,5 +17,16 @@ handler.setFormatter(logging.Formatter(FORMAT))
 logger.addHandler(handler)
 
 
-def notify(message: NotificationMessage) -> None:
+def get_targets(targets: List[Dict[str, Dict[str, Any]]]) -> Generator[NotificationTarget, None, None]:
+    for target in targets:
+        for key, value in target.items():
+            yield NotificationTarget(**value)
+
+
+def notify(message: NotificationMessage, targets_config: Dict[str, Any]) -> None:
+    targets = get_targets(targets_config["notification_targets"])
+    for target in targets:
+        if target.type == NotificationType.slack:
+            notifier = SlackNotifier(target)
+            notifier.notify(message)
     logger.error(message.dict())

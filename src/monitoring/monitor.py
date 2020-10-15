@@ -12,9 +12,10 @@ from notification.notification import NotificationMessage, notify
 import yaml
 
 
-def get_targets(targets: List[Dict[str, Any]]) -> Generator[MonitoringTarget, None, None]:
+def get_targets(targets: List[Dict[str, Dict[str, Any]]]) -> Generator[MonitoringTarget, None, None]:
     for target in targets:
-        yield MonitoringTarget(**target)
+        for key, value in target.items():
+            yield MonitoringTarget(**value)
 
 
 async def monitor(target: MonitoringTarget) -> MonitoringResult:
@@ -51,7 +52,8 @@ async def watch(f: IO = None) -> None:
         f = open("targets.yaml")
     monitors = []
     try:
-        targets = get_targets(yaml.load(f, Loader=yaml.BaseLoader))
+        targets_config = yaml.load(f, Loader=yaml.BaseLoader)
+        targets = get_targets(targets_config["monitor_targets"])
     except Exception:
         raise IncorrectYaml()
     for target in targets:
@@ -63,4 +65,5 @@ async def watch(f: IO = None) -> None:
             notify(NotificationMessage(
                 expected_status_code=result.expected_status_code,
                 status_code=result.status_code,
-                message=result.response))
+                message=result.response),
+                targets_config)
