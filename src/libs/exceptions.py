@@ -4,3 +4,7 @@ class IncorrectYaml(Exception):
 
 class NotificationError(Exception):
     pass
+
+
+class UnsupportedDeployName(Exception):
+    pass
