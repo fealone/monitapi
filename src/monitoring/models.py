@@ -28,3 +28,4 @@ class MonitoringResult(BaseModel):
     status_code: int
     state: bool
     response: str
+    url: str

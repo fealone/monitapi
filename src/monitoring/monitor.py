@@ -43,6 +43,7 @@ async def monitor(target: MonitoringTarget) -> MonitoringResult:
                 expected_status_code=target.status_code,
                 status_code=response.status,
                 state=state,
+                url=target.url,
                 response=await response.text())
 
 
@@ -64,5 +65,6 @@ async def watch(f: IO = None) -> None:
             notify(NotificationMessage(
                 expected_status_code=result.expected_status_code,
                 status_code=result.status_code,
-                message=result.response),
+                message=result.response,
+                url=result.url),
                 targets_config)
