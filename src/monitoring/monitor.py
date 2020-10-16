@@ -14,8 +14,7 @@ import yaml
 
 def get_targets(targets: List[Dict[str, Dict[str, Any]]]) -> Generator[MonitoringTarget, None, None]:
     for target in targets:
-        for key, value in target.items():
-            yield MonitoringTarget(**value)
+        yield MonitoringTarget(**target)
 
 
 async def monitor(target: MonitoringTarget) -> MonitoringResult:

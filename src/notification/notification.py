@@ -19,8 +19,7 @@ logger.addHandler(handler)
 
 def get_targets(targets: List[Dict[str, Dict[str, Any]]]) -> Generator[NotificationTarget, None, None]:
     for target in targets:
-        for key, value in target.items():
-            yield NotificationTarget(**value)
+        yield NotificationTarget(**target)
 
 
 def notify(message: NotificationMessage, targets_config: Dict[str, Any]) -> None:

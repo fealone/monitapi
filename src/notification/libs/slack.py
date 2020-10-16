@@ -1,10 +1,12 @@
 import json
 from typing import Any, Dict
 
-import requests
+from libs.exceptions import NotificationError
 
-from notification.models import NotificationMessage
 from notification.libs.notifier import Notifier
+from notification.models import NotificationMessage
+
+import requests
 
 
 def replace_payload(payload: Dict[str, Any], message: NotificationMessage) -> Dict[str, Any]:
@@ -22,7 +24,11 @@ def replace_payload(payload: Dict[str, Any], message: NotificationMessage) -> Di
 
 
 def replace_variable(variable: Any, message: NotificationMessage) -> Any:
-    if isinstance(variable, str):
+    if isinstance(variable, list):
+        return [replace_variable(v, message) for v in variable]
+    elif isinstance(variable, dict):
+        return replace_payload(variable, message)
+    elif isinstance(variable, str):
         return variable.replace(
             "{{message}}", message.message).replace(
                 "{{status_code}}", str(message.status_code)).replace(
@@ -38,4 +44,6 @@ class SlackNotifier(Notifier):
         res = requests.post(
                 self.endpoint,
                 headers={"Content-Type": "applicaton/json"},
-                data=json.dumps({"blocks": list(payload.values())}))
+                data=json.dumps(payload))
+        if res.status_code != 200:
+            raise NotificationError(res.content)
