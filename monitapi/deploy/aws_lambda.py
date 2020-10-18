@@ -5,4 +5,5 @@ from .models import DeployAWSLambda
 class AWSLambda(Deployer):
 
     def deploy(self, config: DeployAWSLambda) -> None:
-        pass
+        raise Exception(("AWS Lambda is not currently supported.\r\n"
+                        "However, please wait as we plan to support it in the future."))

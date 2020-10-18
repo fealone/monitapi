@@ -72,7 +72,7 @@ def deploy(platform: DeployPlatform,
         raise UnsupportedDeployPlatform(platform)
     tmp_dir = TemporaryDirectory(prefix="monitapi")
     git.Git(tmp_dir.name).clone("https://github.com/fealone/monitapi")
-    shutil.copyfile(file, os.path.join(tmp_dir.name, "monitapi/targets.yaml"))
+    shutil.copyfile(file, os.path.join(tmp_dir.name, "monitapi/monitapi/targets.yaml"))
     if platform == DeployPlatform.cloud_functions:
         config = DeployCloudFunctions(name=name, region=region)
         CloudFunctions(tmp_dir).deploy(config)
