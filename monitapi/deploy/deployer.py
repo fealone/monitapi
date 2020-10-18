@@ -2,7 +2,7 @@ import os
 from abc import ABC, abstractmethod
 from tempfile import TemporaryDirectory
 
-from deploy.models import DeployConfig
+from .models import DeployConfig
 
 
 class Deployer(ABC):
@@ -12,7 +12,7 @@ class Deployer(ABC):
 
     @property
     def source_directory(self) -> str:
-        return os.path.join(self.tmp_dir.name, "monitapi/src")
+        return os.path.join(self.tmp_dir.name, "monitapi")
 
     @property
     def directory(self) -> str:

@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from notification.models import NotificationMessage
+from ..models import NotificationMessage
 
 
 def replace_payload(payload: Dict[str, Any], message: NotificationMessage) -> Dict[str, Any]:

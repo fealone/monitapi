@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict
 
-from notification.models import NotificationTarget, NotificationMessage
+from ..models import NotificationMessage, NotificationTarget
 
 
 class Notifier(ABC):

@@ -6,15 +6,14 @@ from agraffe import Agraffe, Service
 
 import click
 
-from deploy.aws_lambda import AWSLambda
-from deploy.cloud_functions import CloudFunctions
-from deploy.models import DeployAWSLambda, DeployCloudFunctions, DeployPlatform
-
 from fastapi import FastAPI, Request
 
-from libs.exceptions import UnsupportedDeployPlatform
+from .deploy.aws_lambda import AWSLambda
+from .deploy.cloud_functions import CloudFunctions
+from .deploy.models import DeployAWSLambda, DeployCloudFunctions, DeployPlatform
+from .libs.exceptions import UnsupportedDeployPlatform
+from .monitoring.monitor import watch
 
-from monitoring.monitor import watch
 
 app = FastAPI()
 
@@ -45,14 +44,13 @@ def commands() -> None:
 @commands.command()
 def serve() -> None:
     import uvicorn
-    uvicorn.run("api:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("monitapi:app", host="0.0.0.0", port=8000, reload=True)
 
 
 @commands.command()
 @click.argument("path")
 def monitor(path: str) -> None:
     import asyncio
-    from monitoring.monitor import watch
     asyncio.run(watch(open(path)))
 
 
@@ -74,16 +72,10 @@ def deploy(platform: DeployPlatform,
         raise UnsupportedDeployPlatform(platform)
     tmp_dir = TemporaryDirectory(prefix="monitapi")
     git.Git(tmp_dir.name).clone("https://github.com/fealone/monitapi")
-    shutil.copyfile(file, os.path.join(tmp_dir.name, "monitapi/src/targets.yaml"))
-    shutil.copyfile(os.path.join(tmp_dir.name, "monitapi/requirements.txt"),
-                    os.path.join(tmp_dir.name, "monitapi/src/requirements.txt"))
+    shutil.copyfile(file, os.path.join(tmp_dir.name, "monitapi/targets.yaml"))
     if platform == DeployPlatform.cloud_functions:
         config = DeployCloudFunctions(name=name, region=region)
         CloudFunctions(tmp_dir).deploy(config)
     if platform == DeployPlatform.aws_lambda:
         config = DeployAWSLambda(name=name, lambda_role=lambda_role)
         AWSLambda(tmp_dir).deploy(config)
-
-
-if __name__ == "__main__":
-    commands()

@@ -1,7 +1,7 @@
 import os
 
-from deploy.deployer import Deployer
-from deploy.models import DeployCloudFunctions
+from .deployer import Deployer
+from .models import DeployCloudFunctions
 
 
 class CloudFunctions(Deployer):

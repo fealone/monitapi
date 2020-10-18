@@ -1,12 +1,11 @@
 import json
 
-from libs.exceptions import NotificationError
-
-from notification.libs.notifier import Notifier
-from notification.libs.replace_payload import replace_payload
-from notification.models import NotificationMessage
-
 import requests
+
+from .notifier import Notifier
+from .replace_payload import replace_payload
+from ..models import NotificationMessage
+from ...libs.exceptions import NotificationError
 
 
 class SlackNotifier(Notifier):

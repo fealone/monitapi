@@ -1,5 +1,5 @@
-from deploy.deployer import Deployer
-from deploy.models import DeployAWSLambda
+from .deployer import Deployer
+from .models import DeployAWSLambda
 
 
 class AWSLambda(Deployer):

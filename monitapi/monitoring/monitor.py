@@ -3,13 +3,11 @@ from typing import Any, Dict, Generator, IO, List
 
 from aiohttp import ClientSession
 
-from libs.exceptions import IncorrectYaml
-
-from monitoring.models import MonitoringResult, MonitoringTarget
-
-from notification.notification import NotificationMessage, notify
-
 import yaml
+
+from .models import MonitoringResult, MonitoringTarget
+from ..libs.exceptions import IncorrectYaml
+from ..notification.notification import NotificationMessage, notify
 
 
 def get_targets(targets: List[Dict[str, Dict[str, Any]]]) -> Generator[MonitoringTarget, None, None]:

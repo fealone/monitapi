@@ -1,9 +1,9 @@
-from typing import Any, Dict, Generator, List
 import logging
 import sys
+from typing import Any, Dict, Generator, List
 
-from notification.models import NotificationMessage, NotificationTarget, NotificationType
-from notification.libs.slack import SlackNotifier
+from .libs.slack import SlackNotifier
+from .models import NotificationMessage, NotificationTarget, NotificationType
 
 
 logger = logging.getLogger("monitapi.alert")
