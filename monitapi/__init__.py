@@ -27,7 +27,7 @@ async def monitoring(request: Request) -> Dict[str, str]:
 platform = os.environ.get("PLATFORM", "local")
 
 if platform == "local":
-    pass
+    entry_point = None
 elif platform == "GCP":
     entry_point = Agraffe.entry_point(app, Service.google_cloud_functions)
 elif platform == "AWS":
