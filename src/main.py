@@ -1,12 +1,40 @@
+import os
 from tempfile import TemporaryDirectory
+from typing import Dict
+
+from agraffe import Agraffe, Service
 
 import click
 
 from deploy.aws_lambda import AWSLambda
 from deploy.cloud_functions import CloudFunctions
-from deploy.models import DeployName
+from deploy.models import DeployAWSLambda, DeployCloudFunctions, DeployPlatform
 
-from libs.exceptions import UnsupportedDeployName
+from fastapi import FastAPI, Request
+
+from libs.exceptions import UnsupportedDeployPlatform
+
+from monitoring.monitor import watch
+
+app = FastAPI()
+
+
+@app.get("/monitoring")
+async def monitoring(request: Request) -> Dict[str, str]:
+    await watch()
+    return {}
+
+
+platform = os.environ.get("PLATFORM", "local")
+
+if platform == "local":
+    pass
+elif platform == "GCP":
+    entry_point = Agraffe.entry_point(app, Service.google_cloud_functions)
+elif platform == "AWS":
+    entry_point = Agraffe.entry_point(app, Service.aws_lambda)
+else:
+    Exception(f"Unsupported platform of {platform}")
 
 
 @click.group()
@@ -29,24 +57,32 @@ def monitor(path: str) -> None:
 
 
 @commands.command()
-@click.argument("name")
-@click.option("-f", "--file")
-def deploy(name: DeployName, file: str) -> None:
+@click.argument("platform")
+@click.option("-f", "--file", default="targets.yaml")
+@click.option("-r", "--region", default="asia-northeast1")
+@click.option("-n", "--name", default="monitapi")
+@click.option("-l", "--lambda_role")
+def deploy(platform: DeployPlatform,
+           file: str,
+           region: str,
+           name: str,
+           lambda_role: str) -> None:
     import os
     import shutil
     import git
-    if not hasattr(DeployName, name):
-        raise UnsupportedDeployName(name)
+    if not hasattr(DeployPlatform, platform):
+        raise UnsupportedDeployPlatform(platform)
     tmp_dir = TemporaryDirectory(prefix="monitapi")
     git.Git(tmp_dir.name).clone("https://github.com/fealone/monitapi")
-    if file:
-        shutil.copyfile(file, os.path.join(tmp_dir.name, "monitapi/src/targets.yaml"))
-    else:
-        shutil.copyfile("targets.yaml", os.path.join(tmp_dir.name, "monitapi/src/targets.yaml"))
-    if name == DeployName.cloud_functions:
-        CloudFunctions(tmp_dir).deploy()
-    if name == DeployName.aws_lambda:
-        AWSLambda(tmp_dir).deploy()
+    shutil.copyfile(file, os.path.join(tmp_dir.name, "monitapi/src/targets.yaml"))
+    shutil.copyfile(os.path.join(tmp_dir.name, "monitapi/requirements.txt"),
+                    os.path.join(tmp_dir.name, "monitapi/src/requirements.txt"))
+    if platform == DeployPlatform.cloud_functions:
+        config = DeployCloudFunctions(name=name, region=region)
+        CloudFunctions(tmp_dir).deploy(config)
+    if platform == DeployPlatform.aws_lambda:
+        config = DeployAWSLambda(name=name, lambda_role=lambda_role)
+        AWSLambda(tmp_dir).deploy(config)
 
 
 if __name__ == "__main__":

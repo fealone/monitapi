@@ -2,6 +2,8 @@ import os
 from abc import ABC, abstractmethod
 from tempfile import TemporaryDirectory
 
+from deploy.models import DeployConfig
+
 
 class Deployer(ABC):
 
@@ -17,5 +19,5 @@ class Deployer(ABC):
         return self.tmp_dir.name
 
     @abstractmethod
-    def deploy(self) -> None:
+    def deploy(self, config: DeployConfig) -> None:
         ...

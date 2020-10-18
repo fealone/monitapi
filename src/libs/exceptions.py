@@ -6,5 +6,5 @@ class NotificationError(Exception):
     pass
 
 
-class UnsupportedDeployName(Exception):
+class UnsupportedDeployPlatform(Exception):
     pass
