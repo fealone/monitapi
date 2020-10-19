@@ -47,7 +47,7 @@ monitor_targets:
 
 #### Notification target
 ```yaml
-notification_targets
+notification_targets:
     - {notification-name}
       type: {notification-type}
       endpoint: {notification-endpoint}
