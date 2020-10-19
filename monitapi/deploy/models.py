@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Dict
 
 from pydantic import BaseModel
 
@@ -9,14 +10,5 @@ class DeployPlatform(str, Enum):
 
 
 class DeployConfig(BaseModel):
-    ...
-
-
-class DeployCloudFunctions(DeployConfig):
     name: str
-    region: str
-
-
-class DeployAWSLambda(DeployConfig):
-    name: str
-    lambda_role: str
+    options: Dict[str, str]

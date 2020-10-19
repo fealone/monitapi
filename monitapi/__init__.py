@@ -10,7 +10,7 @@ from fastapi import FastAPI, Request
 
 from .deploy.aws_lambda import AWSLambda
 from .deploy.cloud_functions import CloudFunctions
-from .deploy.models import DeployAWSLambda, DeployCloudFunctions, DeployPlatform
+from .deploy.models import DeployConfig, DeployPlatform
 from .libs.exceptions import UnsupportedDeployPlatform
 from .monitoring.monitor import watch
 
@@ -57,15 +57,14 @@ def monitor(path: str) -> None:
 @commands.command()
 @click.argument("platform")
 @click.option("-f", "--file", default="targets.yaml")
-@click.option("-r", "--region", default="asia-northeast1")
 @click.option("-n", "--name", default="monitapi")
-@click.option("-l", "--lambda_role")
+@click.option("-o", "--options", default="{}")
 def deploy(platform: DeployPlatform,
            file: str,
-           region: str,
            name: str,
-           lambda_role: str) -> None:
+           options: str) -> None:
     import os
+    import json
     import shutil
     import git
     if not hasattr(DeployPlatform, platform):
@@ -74,8 +73,8 @@ def deploy(platform: DeployPlatform,
     git.Git(tmp_dir.name).clone("https://github.com/fealone/monitapi")
     shutil.copyfile(file, os.path.join(tmp_dir.name, "monitapi/targets.yaml"))
     if platform == DeployPlatform.cloud_functions:
-        config = DeployCloudFunctions(name=name, region=region)
-        CloudFunctions(tmp_dir).deploy(config)
+        cloud_functions_config = DeployConfig(name=name, options=json.loads(options))
+        CloudFunctions(tmp_dir).deploy(cloud_functions_config)
     if platform == DeployPlatform.aws_lambda:
-        config = DeployAWSLambda(name=name, lambda_role=lambda_role)
-        AWSLambda(tmp_dir).deploy(config)
+        aws_lambda_config = DeployConfig(name=name, options=json.loads(options))
+        AWSLambda(tmp_dir).deploy(aws_lambda_config)
