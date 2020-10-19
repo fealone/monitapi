@@ -1,0 +1,27 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "fealone",
+      "name": "fealone",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/57695598?v=4",
+      "profile": "http://lonesec.com",
+      "contributions": [
+        "code",
+        "content",
+        "design",
+        "example"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "monitapi",
+  "projectOwner": "fealone",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
