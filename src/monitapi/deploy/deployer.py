@@ -12,7 +12,7 @@ class Deployer(ABC):
 
     @property
     def source_directory(self) -> str:
-        return os.path.join(self.tmp_dir.name, "monitapi")
+        return os.path.join(self.tmp_dir.name, "monitapi/src")
 
     @property
     def directory(self) -> str:
