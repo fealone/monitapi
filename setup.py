@@ -7,12 +7,12 @@ def _requires_from_file(filename):
 
 
 setup(
-    packages=find_packages(),
+    packages=find_packages("src"),
+    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
     install_requires=_requires_from_file('requirements.txt'),
-    entry_points="""
-        [console_scripts]
-        monitapi=monitapi:commands
-    """
+    entry_points={
+        "console_scripts": ["monitapi=monitapi:commands"]
+    }
 )
