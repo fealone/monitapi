@@ -30,6 +30,7 @@ monitor_targets:
           {header-name}: {header-value}
       status_code: {expected-status-code}
       timeout: {timeout}
+      retry: {retry}
 ```
 
 * monitor-name
@@ -41,9 +42,11 @@ monitor_targets:
 * header-name, header-value
     - HTTP headers
 * expected-status-code
-    - The status code you expect from the monitored target.
+    - The status code you expect from the monitored target
 * timeout
-    - Read timeout and connection timeout.
+    - Read timeout and connection timeout
+* retry
+    - Number of retries
 
 #### Notification target
 ```yaml
@@ -60,10 +63,10 @@ notification_targets:
 * notification-type
     - slack
 * notification-endpoint
-    - The endpoint that sends the notification request.
+    - The endpoint that sends the notification request
 * request-payload
-    - The POST payload to send to the endpoint.
-    - You can use {{url}}, {{status_code}}, {{expected status_code}} and {{message}} as variables.
+    - The POST payload to send to the endpoint
+    - You can use {{url}}, {{status_code}}, {{expected status_code}} and {{message}} as variables
 
 #### Example
 ```yaml
