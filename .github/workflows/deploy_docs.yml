@@ -1,0 +1,32 @@
+name: Deploy docs
+
+on:
+  push:
+    branches:
+    - master
+
+jobs:
+  deploy:
+    name: Deploy docs
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12.x
+    - name: Install dependencies
+      run: yarn --frozen-lockfile --ignore-optional
+      env:
+        CI: true
+    - name: Generate doc
+      working-directory: website
+      run: |
+        yarn build:doc
+      env:
+        CI: true
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./website/build
