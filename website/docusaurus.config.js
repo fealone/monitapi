@@ -1,7 +1,7 @@
 module.exports = {
   title: 'monitapi',
   tagline: 'monitapi is something to monitor API(URL) by a serverless.',
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://fealone.github.io/monitapi',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
