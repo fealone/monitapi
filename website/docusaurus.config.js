@@ -2,7 +2,7 @@ module.exports = {
   title: 'monitapi',
   tagline: 'monitapi is something to monitor API(URL) by a serverless.',
   url: 'https://fealone.github.io/monitapi',
-  baseUrl: '/',
+  baseUrl: '/monitapi/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
   organizationName: 'fealone', // Usually your GitHub org/user name.
