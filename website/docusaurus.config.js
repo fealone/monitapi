@@ -5,13 +5,13 @@ module.exports = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'fealone', // Usually your GitHub org/user name.
+  projectName: 'monitapi', // Usually your repo name.
   themeConfig: {
     navbar: {
       title: 'monitapi',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'monitapi Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -35,12 +35,12 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Style Guide',
+              label: 'Intoroduction',
               to: 'docs/',
             },
             {
-              label: 'Second Doc',
-              to: 'docs/doc2/',
+              label: 'Documents',
+              to: 'docs/definition',
             },
           ],
         },
@@ -78,7 +78,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/fealone/monitapi/edit/master/website/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
