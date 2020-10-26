@@ -8,6 +8,10 @@ monitapi is something to monitor API(URL) by a serverless.
 It supports hosting with FastAPI, running with CLI, and deploying to serverless.
 
 ## Getting Started
+Please refer to the documents created by Docusaurus.  
+A rich README and website are in preparation.
+
+https://fealone.github.io/monitapi
 
 ### Installation
 monitapi is made by Python, so can you install it via PyPI.
@@ -16,59 +20,7 @@ monitapi is made by Python, so can you install it via PyPI.
 pip install monitapi
 ```
 
-### Definition
-The monitoring target and notification target can be defined using YAML.  
-It's defined as one file.
-
-#### Monitoring target
-```yaml
-monitor_targets:
-    - {monitor-name}
-      method: {http-method}
-      url: {monitoring-url}
-      headers:
-          {header-name}: {header-value}
-      status_code: {expected-status-code}
-      timeout: {timeout}
-      retry: {retry}
-```
-
-* monitor-name
-    - Monitor name
-* http-method
-    - HEAD, GET, POST, PUT, DELETE, OPTIONS, PATCH
-* monitoring-url
-    - URL to monitor
-* header-name, header-value
-    - HTTP headers
-* expected-status-code
-    - The status code you expect from the monitored target
-* timeout
-    - Read timeout and connection timeout
-* retry
-    - Number of retries
-
-#### Notification target
-```yaml
-notification_targets:
-    - {notification-name}
-      type: {notification-type}
-      endpoint: {notification-endpoint}
-      payload:
-          {request-payload}
-```
-
-* notification-name
-    - Notification name
-* notification-type
-    - slack
-* notification-endpoint
-    - The endpoint that sends the notification request
-* request-payload
-    - The POST payload to send to the endpoint
-    - You can use {{url}}, {{status_code}}, {{expected status_code}} and {{message}} as variables
-
-#### Example
+### Example targets file
 ```yaml
 monitor_targets:
     - github-monitapi
@@ -91,37 +43,23 @@ notification_targets:
 
 ```
 
-## Usage
+### Usage
 
-### One shot 
+#### One shot 
 ```shell
 monitapi monitor {targets.yaml}
 ```
 
-### Run with FastAPI
+#### Run with FastAPI
 You need to put targets.yaml in the current directory.
 
 ```shell
 monitapi serve
 ```
 
-### Deploy to serverless
+#### Deploy to serverless
 ```shell
 monitapi deploy {platform} --name {function-name} --file {targets.yaml} --options {deploy-option}
-```
-
-* platform
-    - cloud_functions
-* function-name
-    - Function name to deploy
-* targets.yaml
-    - Definition file as YAML
-* deploy-option
-    - Official deployment options
-
-#### Example
-```shell
-monitapi deploy cloud_functions --name monitapi --file targets.yaml --options '{"--region": "asia-northeast1"}'
 ```
 
 ## Contributors ✨
