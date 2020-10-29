@@ -4,7 +4,7 @@ module.exports = {
   url: 'https://fealone.github.io/monitapi',
   baseUrl: '/monitapi/',
   onBrokenLinks: 'throw',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.png',
   organizationName: 'fealone', // Usually your GitHub org/user name.
   projectName: 'monitapi', // Usually your repo name.
   themeConfig: {
@@ -12,7 +12,7 @@ module.exports = {
       title: 'monitapi',
       logo: {
         alt: 'monitapi Logo',
-        src: 'img/logo.svg',
+        src: 'img/favicon.png',
       },
       items: [
         {

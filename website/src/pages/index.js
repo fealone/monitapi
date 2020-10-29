@@ -63,7 +63,9 @@ function Home() {
       description="monitapi is something to monitor API(URL) by a serverless.">
       <header className={clsx('hero hero--primary', styles.heroBanner)}>
         <div className="container">
-          <h1 className="hero__title">{siteConfig.title}</h1>
+          <div className="hero__logo">
+            <img src='img/logo.png' alt='icon' width="500px" />
+          </div>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div className={styles.buttons}>
             <Link
