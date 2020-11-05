@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "monitapi"
-version = "0.3.0"
+version = "0.3.2"
 description = "monitapi is something to monitor API(URL) by a serverless."
 authors = ["fealone"]
 license = "GPL-3.0-or-later"

@@ -8,6 +8,7 @@ module.exports = {
   organizationName: 'fealone', // Usually your GitHub org/user name.
   projectName: 'monitapi', // Usually your repo name.
   themeConfig: {
+    image: 'img/ogimg.png',
     navbar: {
       title: 'monitapi',
       logo: {
