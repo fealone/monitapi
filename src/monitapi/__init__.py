@@ -7,6 +7,7 @@ from agraffe import Agraffe, Service
 import click
 
 from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
 
 from .deploy.aws_lambda import AWSLambda
 from .deploy.cloud_functions import CloudFunctions
@@ -21,7 +22,7 @@ app = FastAPI()
 @app.get("/monitoring")
 async def monitoring(request: Request) -> Dict[str, str]:
     await watch()
-    return {}
+    return jsonable_encoder({})
 
 
 platform = os.environ.get("PLATFORM", "local")
