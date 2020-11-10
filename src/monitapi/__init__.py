@@ -1,22 +1,27 @@
+import logging
 import os
 from tempfile import TemporaryDirectory
-from typing import Dict
+from typing import Any, Dict
 
 from agraffe import Agraffe, Service
 
 import click
 
-from fastapi import FastAPI, Request
+from fastapi import Body, FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 
 from .deploy.aws_lambda import AWSLambda
 from .deploy.cloud_functions import CloudFunctions
 from .deploy.models import DeployConfig, DeployPlatform
 from .libs.exceptions import UnsupportedDeployPlatform
+from .libs.logging import get_logger
 from .monitoring.monitor import watch
 
 
 app = FastAPI()
+
+logger = get_logger()
+logging.basicConfig(level=logging.INFO)
 
 
 @app.get("/monitoring")
@@ -26,7 +31,8 @@ async def monitoring_with_get(request: Request) -> Dict[str, str]:
 
 
 @app.post("/monitoring")
-async def monitoring_with_post(request: Request) -> Dict[str, str]:
+async def monitoring_with_post(request: Request, body: Dict[str, Any] = Body(...)) -> Dict[str, str]:
+    logger.info(body)
     await watch()
     return jsonable_encoder({})
 

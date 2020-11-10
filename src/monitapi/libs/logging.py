@@ -1,16 +1,23 @@
 import logging
 import sys
 
-logger = logging.getLogger("monitapi.alert")
-for handler in logger.handlers:
-    logger.removeHandler(handler)
+alert_logger = logging.getLogger("monitapi.alert")
+standard_logger = logging.getLogger("monitapi")
 
-handler = logging.StreamHandler(sys.stderr)
+for logger in (alert_logger, standard_logger):
+    for handler in logger.handlers:
+        logger.removeHandler(handler)
 
-FORMAT = '%(asctime)s %(levelname)s [%(name)s] [%(threadName)s] %(message)s'
-handler.setFormatter(logging.Formatter(FORMAT))
-logger.addHandler(handler)
+    handler = logging.StreamHandler(sys.stderr)
+
+    FORMAT = '%(asctime)s %(levelname)s [%(name)s] [%(threadName)s] %(message)s'
+    handler.setFormatter(logging.Formatter(FORMAT))
+    logger.addHandler(handler)
+
+
+def get_alert_logger() -> logging.Logger:
+    return alert_logger
 
 
 def get_logger() -> logging.Logger:
-    return logger
+    return standard_logger

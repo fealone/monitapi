@@ -2,10 +2,10 @@ from typing import Any, Dict, Generator, List
 
 from .libs.slack import SlackNotifier
 from .models import NotificationMessage, NotificationTarget, NotificationType
-from ..libs.logging import get_logger
+from ..libs.logging import get_alert_logger
 
 
-logger = get_logger()
+logger = get_alert_logger()
 
 
 def get_targets(targets: List[Dict[str, Dict[str, Any]]]) -> Generator[NotificationTarget, None, None]:
