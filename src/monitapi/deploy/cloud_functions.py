@@ -1,4 +1,4 @@
-import os
+import subprocess
 
 from .deployer import Deployer
 from .models import DeployConfig
@@ -15,4 +15,4 @@ class CloudFunctions(Deployer):
                "--entry-point entry_point "
                "--set-env-vars PLATFORM=GCP ")
         cmd += options
-        os.system(cmd)
+        subprocess.run(cmd, shell=True, check=True)
