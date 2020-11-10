@@ -14,6 +14,8 @@ for logger in (alert_logger, standard_logger):
     handler.setFormatter(logging.Formatter(FORMAT))
     logger.addHandler(handler)
 
+standard_logger.setLevel(logging.INFO)
+
 
 def get_alert_logger() -> logging.Logger:
     return alert_logger

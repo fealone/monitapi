@@ -1,4 +1,3 @@
-import logging
 import os
 from tempfile import TemporaryDirectory
 from typing import Any, Dict
@@ -21,7 +20,6 @@ from .monitoring.monitor import watch
 app = FastAPI()
 
 logger = get_logger()
-logging.basicConfig(level=logging.INFO)
 
 
 @app.get("/monitoring")
