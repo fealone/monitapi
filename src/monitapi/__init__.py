@@ -20,7 +20,13 @@ app = FastAPI()
 
 
 @app.get("/monitoring")
-async def monitoring(request: Request) -> Dict[str, str]:
+async def monitoring_with_get(request: Request) -> Dict[str, str]:
+    await watch()
+    return jsonable_encoder({})
+
+
+@app.post("/monitoring")
+async def monitoring_with_post(request: Request) -> Dict[str, str]:
     await watch()
     return jsonable_encoder({})
 
