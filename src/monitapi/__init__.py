@@ -82,7 +82,7 @@ def deploy(platform: DeployPlatform,
     if not hasattr(DeployPlatform, platform):
         raise UnsupportedDeployPlatform(platform)
     tmp_dir = TemporaryDirectory(prefix="monitapi")
-    repo = git.Repo.clone_from("https://github.com/fealone/monitapi", tmp_dir.name)
+    repo = git.Repo.clone_from("https://github.com/fealone/monitapi", os.path.join(tmp_dir.name, "monitapi"))
     repo.git.checkout(version.version)
     shutil.copyfile(file, os.path.join(tmp_dir.name, "monitapi/src/targets.yaml"))
     shutil.copyfile(os.path.join(tmp_dir.name, "monitapi/requirements.txt"),
