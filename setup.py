@@ -1,5 +1,10 @@
+from importlib.machinery import SourceFileLoader
+
 from setuptools import find_packages
 from setuptools import setup
+
+
+version = SourceFileLoader('version', 'src/monitapi/version.py').load_module()
 
 
 def _requires_from_file(filename):
@@ -7,6 +12,7 @@ def _requires_from_file(filename):
 
 
 setup(
+    version=version.version,
     packages=find_packages("src"),
     package_dir={"": "src"},
     include_package_data=True,

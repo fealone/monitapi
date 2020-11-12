@@ -9,6 +9,7 @@ import click
 from fastapi import Body, FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 
+from . import version
 from .deploy.aws_lambda import AWSLambda
 from .deploy.cloud_functions import CloudFunctions
 from .deploy.models import DeployConfig, DeployPlatform
@@ -81,7 +82,8 @@ def deploy(platform: DeployPlatform,
     if not hasattr(DeployPlatform, platform):
         raise UnsupportedDeployPlatform(platform)
     tmp_dir = TemporaryDirectory(prefix="monitapi")
-    git.Git(tmp_dir.name).clone("https://github.com/fealone/monitapi")
+    repo = git.Repo.clone_from("https://github.com/fealone/monitapi", tmp_dir.name)
+    repo.git.checkout(version.version)
     shutil.copyfile(file, os.path.join(tmp_dir.name, "monitapi/src/targets.yaml"))
     shutil.copyfile(os.path.join(tmp_dir.name, "monitapi/requirements.txt"),
                     os.path.join(tmp_dir.name, "monitapi/src/requirements.txt"))
