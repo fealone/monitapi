@@ -18,6 +18,16 @@ A rich README and website are in preparation.
 
 https://fealone.github.io/monitapi
 
+## Image of operating environment
+
+### GCP
+
+<img src="https://raw.githubusercontent.com/fealone/monitapi/master/website/static/img/gcp.rediagram.png" width="600px">
+
+### AWS
+
+<img src="https://raw.githubusercontent.com/fealone/monitapi/master/website/static/img/aws.rediagram.png" width="600px">
+
 ### Installation
 monitapi is made by Python, so can you install it via PyPI.
 
