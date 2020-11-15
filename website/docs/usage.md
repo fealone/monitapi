@@ -24,6 +24,7 @@ monitapi deploy {platform} --name {function-name} --file {targets.yaml} --option
 
 * platform
     - cloud_functions
+    - aws_lambda
 * function-name
     - Function name to deploy
 * targets.yaml
@@ -32,6 +33,13 @@ monitapi deploy {platform} --name {function-name} --file {targets.yaml} --option
     - Official deployment options
 
 #### Example
+
+* Cloud Functions
 ```shell
 monitapi deploy cloud_functions --name monitapi --file targets.yaml --options '{"--region": "asia-northeast1"}'
+```
+
+* AWS Lambda
+```shell
+monitapi deploy aws_lambda --name monitapi --file targets.yaml --options '{"--role": "{ARN}"}'
 ```
