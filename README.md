@@ -43,6 +43,8 @@ monitor_targets:
       url: https://github.com/fealone/monitapi
       status_code: 200
       timeout: 5
+      retry: 1
+      retry_wait: 5
 
 notification_targets:
     - notification-to-slack:

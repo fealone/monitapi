@@ -22,6 +22,7 @@ class MonitoringTarget(BaseModel):
     timeout: int = 10
     status_code: int
     retry: int = 1
+    retry_wait: int = 5
 
 
 class MonitoringResult(BaseModel):

@@ -27,8 +27,11 @@ async def monitor(target: MonitoringTarget) -> MonitoringResult:
         method = getattr(session, target.method.lower())
         error = ""
         response = None
+        is_retry = False
         for i in range(target.retry):
             is_success = True
+            if is_retry:
+                await asyncio.sleep(target.retry_wait)
             try:
                 if target.body:
                     req = method(
@@ -48,6 +51,7 @@ async def monitor(target: MonitoringTarget) -> MonitoringResult:
                 logger.warning(("Monitor failed. "
                                 f"Target: {target.url}, "
                                 f"Expect: {target.status_code}"))
+                is_retry = True
                 continue
             if response.status != target.status_code:
                 is_success = False
@@ -55,6 +59,7 @@ async def monitor(target: MonitoringTarget) -> MonitoringResult:
                                 f"Target: {target.url}, "
                                 f"Status: {response.status}, "
                                 f"Expect: {target.status_code}"))
+                is_retry = True
                 continue
             if is_success:
                 break
