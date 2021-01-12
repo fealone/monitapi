@@ -18,6 +18,7 @@ monitor_targets:
       status_code: {expected-status-code}
       timeout: {timeout}
       retry: {retry}
+      retry_wait: {retry-wait}
 ```
 
 * monitor-name
@@ -34,6 +35,8 @@ monitor_targets:
     - Read timeout and connection timeout
 * retry
     - Number of retries
+* retry-wait
+    - Wait time between retry requests
 
 #### Notification target
 ```yaml
