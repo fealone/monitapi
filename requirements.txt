@@ -3,6 +3,6 @@ agraffe >=0.3.0
 pydantic >=1.6.1
 pyyaml >= 5.3.1
 aiohttp[speedups] >= 3.6.3
-uvicorn[watchdogreload] >= 0.12.1
+uvicorn >= 0.13.2
 requests >= 2.24.0
 GitPython >= 3.1.9
