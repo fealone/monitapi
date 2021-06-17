@@ -27,6 +27,7 @@ monitor_targets:
     - HEAD, GET, POST, PUT, DELETE, OPTIONS, PATCH
 * monitoring-url
     - URL to monitor
+    - Supports for [http://, https://, stun:]
 * header-name, header-value
     - HTTP headers
 * expected-status-code

@@ -15,12 +15,12 @@ class Method(str, Enum):
 
 
 class MonitoringTarget(BaseModel):
-    method: Method
+    method: Optional[Method]
     url: str
     headers: Dict[str, str] = {}
     body: Optional[bytes]
     timeout: int = 10
-    status_code: int
+    status_code: Optional[int]
     retry: int = 1
     retry_wait: int = 5
 
