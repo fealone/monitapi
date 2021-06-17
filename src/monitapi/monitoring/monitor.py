@@ -1,4 +1,7 @@
 import asyncio
+import socket
+import time
+import uuid
 from typing import Any, Dict, Generator, IO, List
 
 from aiohttp import ClientSession
@@ -19,12 +22,15 @@ def get_targets(targets: List[Dict[str, Dict[str, Any]]]) -> Generator[Monitorin
         yield MonitoringTarget(**target)
 
 
-async def monitor(target: MonitoringTarget) -> MonitoringResult:
+async def monitor_http(target: MonitoringTarget) -> MonitoringResult:
     state: bool
     async with ClientSession(
             read_timeout=target.timeout,
             conn_timeout=target.timeout) as session:
-        method = getattr(session, target.method.lower())
+        if target.method:
+            method = getattr(session, target.method.lower())
+        else:
+            raise Exception("Required method for monitoring http")
         error = ""
         response = None
         is_retry = False
@@ -75,6 +81,51 @@ async def monitor(target: MonitoringTarget) -> MonitoringResult:
                 response=await response.text() if response else error)
 
 
+async def monitor_stun(target: MonitoringTarget) -> MonitoringResult:
+    err = Exception()
+    for i in range(target.retry):
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.setblocking(False)
+            host, port = target.url.split("stun:")[1].split(":")
+            sock.bind(("0.0.0.0", int(port)))
+            mtype = b"\x00\x01"
+            msg = b"\x00\x01\x00\x00\xff\xff\xff\xff"
+            tid = uuid.uuid4().bytes
+            length = bytearray([len(msg)]).rjust(2, b"\x00")
+            header = mtype + length + tid
+            sock.sendto(header+msg, (host, int(port)))
+            in_err = Exception()
+            for j in range(int(target.timeout * 2)):
+                time.sleep(0.5)
+                try:
+                    sock.recvfrom(1024)
+                    break
+                except Exception as e:
+                    in_err = e
+            else:
+                raise in_err
+            break
+        except Exception as e:
+            logger.warning(("Monitor failed. "
+                            f"Target: {target.url}"))
+            err = e
+            time.sleep(target.retry_wait)
+    else:
+        return MonitoringResult(
+                expected_status_code=0,
+                status_code=0,
+                state=False,
+                url=target.url,
+                response=str(err))
+    return MonitoringResult(
+            expected_status_code=0,
+            status_code=0,
+            state=True,
+            url=target.url,
+            response="")
+
+
 async def watch(f: IO = None) -> None:
     if f is None:
         f = open("targets.yaml")
@@ -85,7 +136,12 @@ async def watch(f: IO = None) -> None:
     except Exception:
         raise IncorrectYaml()
     for target in targets:
-        task = asyncio.ensure_future(monitor(target))
+        if target.url.startswith("http://") or target.url.startswith("https://"):
+            task = asyncio.ensure_future(monitor_http(target))
+        elif target.url.startswith("stun:"):
+            task = asyncio.ensure_future(monitor_stun(target))
+        else:
+            logger.warning(f"Unsupported target type. target: {target.url}")
         monitors.append(task)
     results = await asyncio.gather(*monitors)
     for result in results:
