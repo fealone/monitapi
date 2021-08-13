@@ -126,6 +126,36 @@ async def monitor_stun(target: MonitoringTarget) -> MonitoringResult:
             response="")
 
 
+async def monitor_tcp(target: MonitoringTarget) -> MonitoringResult:
+    err = Exception()
+    for i in range(target.retry):
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            host, port = target.url.split("tcp:")[1].split(":")
+            sock.settimeout(target.timeout)
+            sock.connect((host, int(port)))
+            sock.close()
+            break
+        except Exception as e:
+            logger.warning(("Monitor failed. "
+                            f"Target: {target.url}"))
+            err = e
+            time.sleep(target.retry_wait)
+    else:
+        return MonitoringResult(
+                expected_status_code=0,
+                status_code=0,
+                state=False,
+                url=target.url,
+                response=str(err))
+    return MonitoringResult(
+            expected_status_code=0,
+            status_code=0,
+            state=True,
+            url=target.url,
+            response="")
+
+
 async def watch(f: IO = None) -> None:
     if f is None:
         f = open("targets.yaml")
@@ -140,6 +170,8 @@ async def watch(f: IO = None) -> None:
             task = asyncio.ensure_future(monitor_http(target))
         elif target.url.startswith("stun:"):
             task = asyncio.ensure_future(monitor_stun(target))
+        elif target.url.startswith("tcp:"):
+            task = asyncio.ensure_future(monitor_tcp(target))
         else:
             logger.warning(f"Unsupported target type. target: {target.url}")
         monitors.append(task)
